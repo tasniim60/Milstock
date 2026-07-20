@@ -1,0 +1,398 @@
+MilStock Capstone Presentation Content
+Matched to: Capstone Project Presentation Template
+
+Slide 1 - Title
+Project Title:
+MilStock: Smart Food Inventory & Warehouse Management System
+
+CAPSTONE PROJECT PRESENTATION
+
+Track / Job Profile:
+Software Development / Applied Technology
+
+Team:
+[Team Name - Member 1, Member 2, Member 3, Member 4, Member 5]
+
+Supervisor:
+[Supervisor Name / Track Head / Academic Committee]
+
+Submission:
+June 2026
+
+
+Slide 2 - Agenda
+01 Team Introduction
+02 Problem Statement & Background
+03 Objectives & Scope
+04 Proposed Solution & Architecture
+05 Technology Stack & Implementation
+06 Demo & Results
+07 Impact & Future Work
+
+
+Slide 3 - Team Introduction
+[Member 1 Name]
+Role / Specialization: Project Lead / Full-Stack Coordination
+Key Contribution: Requirements analysis, system planning, final integration
+
+[Member 2 Name]
+Role / Specialization: Backend Developer
+Key Contribution: Express APIs, MongoDB models, authentication, role-based access
+
+[Member 3 Name]
+Role / Specialization: Frontend Developer
+Key Contribution: React dashboards, bilingual UI, protected routing, responsive layouts
+
+[Member 4 Name]
+Role / Specialization: Database & QA
+Key Contribution: Data modeling, seed data, validation, testing, bug tracking
+
+[Member 5 Name]
+Role / Specialization: Deployment & Documentation
+Key Contribution: Vercel/Render deployment, environment setup, documentation, presentation
+
+Supervisor / Track Head:
+[Name & Title]
+
+
+Slide 4 - Problem Statement
+What is the core problem being addressed?
+Food inventory operations are often managed through scattered spreadsheets, manual approvals, and delayed stock updates. This makes it difficult to track warehouse quantities, expiration dates, consumption, supplier requests, and accountability in one reliable system.
+
+Who is affected?
+Warehouse managers, kitchen/unit users, administrators, suppliers, and decision makers responsible for food supply availability and waste reduction.
+
+Current pain points:
+- Limited real-time visibility into stock levels across warehouses
+- Manual request and approval workflows
+- Difficulty tracking expiration, low stock, and waste
+- Weak auditability for inventory movement and user actions
+- Language and accessibility barriers for Arabic-speaking users
+
+Why now?
+Food operations need faster, more reliable digital systems that reduce waste, improve transparency, and support data-driven decisions.
+
+Real-world impact if unsolved:
+Stock shortages, over-ordering, expired items, delayed approvals, inaccurate reports, and higher operational cost.
+
+
+Slide 5 - Objectives & Project Scope
+SMART Objectives:
+1. Build a full-stack inventory platform that manages food products, warehouses, users, suppliers, requests, and reports.
+2. Provide role-based dashboards for administrators, kitchen/unit users, and supplier-related workflows.
+3. Support bilingual English LTR and Arabic RTL interfaces for wider usability.
+4. Enable real-time API-based data operations using MongoDB and reusable frontend API services.
+5. Deploy the frontend and backend as separate cloud services for public demo access.
+
+What's In Scope:
+- User authentication and JWT-based protected routes
+- Admin and unit/kitchen dashboards
+- Inventory item CRUD and item details
+- Warehouse locations and warehouse stock records
+- Supplier and request/order workflows
+- Consumption, waste, movement logs, notifications, audit logs, and reports
+- CSV export with Arabic Excel support
+- Responsive desktop and mobile interface
+- Frontend deployment on Vercel and backend deployment on Render
+
+Out of Scope:
+- Native mobile apps
+- Barcode/RFID hardware integration
+- Payment or procurement finance modules
+- AI demand prediction in the current version
+
+
+Slide 6 - Proposed Solution
+MilStock is a bilingual web-based food inventory and warehouse management system.
+
+It centralizes food supply tracking, warehouse stock, requests, suppliers, users, notifications, waste analysis, and operational reports in one platform.
+
+Core capabilities:
+- Admin dashboard for system-wide monitoring
+- Kitchen/unit user dashboard for request and consumption workflows
+- Warehouse-level stock visibility
+- Low-stock and expiration monitoring
+- Supplier and order tracking
+- Audit logs and CSV exports
+- English and Arabic interfaces
+
+How it improves the current process:
+- Replaces fragmented manual tracking with a connected digital workflow
+- Gives users role-specific access instead of a one-size-fits-all interface
+- Makes stock and request data easier to search, filter, export, and audit
+- Supports Arabic RTL for operational teams that need localized workflows
+
+Unique value proposition:
+A practical food-only inventory platform designed around warehouse operations, bilingual usage, and real deployment rather than a generic stock demo.
+
+
+Slide 7 - System Architecture
+Architecture Diagram Content:
+
+[User Browser]
+React + Vite Frontend
+- English / Arabic UI
+- Role-based protected routes
+- Dashboards, forms, tables, reports
+
+        |
+        | HTTPS API requests
+        v
+
+[Node.js / Express Backend]
+- REST API routes
+- Authentication and authorization
+- Validation and error handling
+- Business logic for inventory, users, orders, waste, reports
+
+        |
+        | Mongoose connection
+        v
+
+[MongoDB Atlas Database]
+- Users
+- Products
+- Warehouses
+- Product warehouse stock
+- Orders and order items
+- Consumption and waste
+- Notifications and audit logs
+
+Cloud Deployment:
+- Frontend: Vercel
+- Backend: Render
+- Database: MongoDB Atlas
+
+Security Layer:
+- JWT authentication
+- Role-based route protection
+- CORS allowlist for the production frontend
+- Helmet security headers
+
+
+Slide 8 - Technology Stack
+Frontend:
+React, Vite, JavaScript, React Router, Radix UI, Lucide React, Recharts, Tailwind utilities
+
+Backend:
+Node.js, Express.js, REST APIs, express-validator, middleware-based error handling
+
+Database:
+MongoDB Atlas with Mongoose schemas and relationships
+
+Authentication & Security:
+JWT, bcrypt password hashing, role-based authorization, CORS, Helmet
+
+Cloud & DevOps:
+Vercel for frontend, Render for backend, MongoDB Atlas for managed database, environment variables for deployment configuration
+
+Data & Reporting:
+CSV export, audit logs, notifications, analytics dashboards, consumption and waste reporting
+
+Localization:
+English LTR and Arabic RTL layouts with localized labels and routes
+
+
+Slide 9 - System Requirements
+Functional Requirements:
+FR1: The system shall allow users to register, log in, and access protected routes based on role.
+FR2: The system shall allow admins to manage users, warehouses, suppliers, products, and stock records.
+FR3: The system shall allow kitchen/unit users to create and track supply requests.
+FR4: The system shall support inventory search, filtering, item details, and stock status indicators.
+FR5: The system shall track consumption, waste, movement logs, notifications, and audit logs.
+FR6: The system shall export selected data to CSV with Arabic Excel compatibility.
+FR7: The system shall support English and Arabic interfaces.
+
+Non-Functional Requirements:
+Performance: API-driven pages should load efficiently with reusable resource hooks and filtered datasets.
+Security: JWT authentication, hashed passwords, role-based access, CORS allowlist, and secure headers.
+Scalability: Separate frontend, backend, and database services allow independent deployment and scaling.
+Availability: Cloud deployment supports public access for demos and future operation.
+Usability: Responsive dashboard design supports desktop and mobile use.
+Maintainability: Modular routes, controllers, models, and reusable frontend components.
+
+
+Slide 10 - Workflow / Use Case Diagram
+Main Actors:
+- Admin
+- Kitchen / Unit User
+- Supplier User
+- System
+
+Core Workflow:
+1. User logs in
+2. System verifies JWT and role
+3. Admin manages warehouses, users, products, and suppliers
+4. Unit user creates a supply request
+5. Admin reviews the request
+6. Admin approves or rejects the request
+7. If approved, stock movement / fulfillment is recorded
+8. System updates warehouse stock and logs the action
+9. Notifications and audit records are generated
+10. Reports show consumption, waste, inventory status, and operational trends
+
+Diagram Suggestion:
+Use a left-to-right flow:
+Login -> Role Dashboard -> Request / Inventory Action -> Backend API -> MongoDB -> Notification / Audit Log -> Report
+
+
+Slide 11 - Implementation & Demo
+Screenshot / Demo 1:
+Admin Dashboard
+Show KPI cards, inventory overview, request status, and operational charts.
+
+Screenshot / Demo 2:
+Inventory / Warehouse Management
+Show searchable inventory table, item details, warehouse stock, and low-stock or expiration indicators.
+
+Key highlights from the demo:
+1. Login redirects users to the correct role-based dashboard.
+2. Admin can manage users, warehouses, products, and requests from one interface.
+3. Inventory records are loaded from the backend API and stored in MongoDB.
+4. Arabic RTL routes and pages are available for localized operations.
+5. CSV exports and audit logs improve reporting and accountability.
+
+Live Demo Link:
+https://milstock-frontend.vercel.app
+
+Backend API:
+https://milstock.onrender.com/api
+
+
+Slide 12 - Results & Key Performance Indicators
+KPI 1:
+Full-stack deployment completed
+Frontend on Vercel, backend on Render, database on MongoDB Atlas
+
+KPI 2:
+Bilingual interface
+English LTR and Arabic RTL user flows implemented
+
+KPI 3:
+Role-based access
+Admin, kitchen/unit user, and supplier-related routes separated by role
+
+KPI 4:
+Operational coverage
+Inventory, warehouses, users, orders, suppliers, consumption, waste, reports, audit logs, and notifications
+
+Suggested chart:
+Feature Coverage by Module
+- Authentication
+- Inventory
+- Warehouses
+- Requests
+- Reports
+- Localization
+- Deployment
+
+Suggested measured metrics to add after demo testing:
+- Average API response time
+- Number of demo records
+- Number of tested user roles
+- Successful request approval workflow rate
+
+
+Slide 13 - Project Impact & Innovation
+Real-world problem solved:
+MilStock helps food operations maintain accurate stock visibility, reduce waste, manage requests, and improve accountability across warehouses and kitchens.
+
+Value delivered:
+- Operational: Faster request handling and clearer warehouse visibility
+- Economic: Better stock control can reduce over-ordering and expired inventory
+- Social: Supports reliable food supply operations for teams and beneficiaries
+- Technical: Demonstrates a real deployed full-stack system with bilingual support
+
+Innovation:
+MilStock is not a generic inventory tracker. It focuses specifically on food inventory workflows, expiration monitoring, warehouse distribution, consumption, waste, and Arabic/English operational use.
+
+Alignment with digital transformation:
+The project supports digital recordkeeping, cloud deployment, data-driven reporting, and accessible localized software, aligning with modern public and private sector digital transformation goals.
+
+Scaling potential:
+The system can evolve into a multi-branch warehouse platform with barcode scanning, demand forecasting, supplier portals, and integration with procurement systems.
+
+
+Slide 14 - Future Work
+Performance & Optimization:
+- Add code splitting to reduce frontend bundle size
+- Add server-side pagination for large tables
+- Optimize API queries and indexing for high-volume records
+
+Feature Enhancement:
+- Add barcode / QR scanning for faster item lookup
+- Add advanced expiration forecasting and reorder suggestions
+- Add richer supplier portal workflows
+
+Testing & Validation:
+- Add automated frontend and backend tests
+- Run field testing with real warehouse users
+- Validate Arabic UX with native speakers and operational staff
+
+Integration & Deployment:
+- Add CI/CD pipeline checks
+- Connect to external procurement or ERP APIs
+- Add production monitoring and logs
+
+Scale & Wider Reach:
+- Support multiple organizations or branches
+- Add configurable roles and permissions
+- Provide admin settings for categories, thresholds, and warehouses
+
+Research & Impact:
+- Study waste reduction before and after system adoption
+- Explore AI demand prediction using historical consumption data
+
+
+Slide 15 - Team Contributions
+[Member 1 Name] - Project leadership, requirements analysis, system planning, final integration
+[Member 2 Name] - Backend API development, database schema design, authentication, authorization
+[Member 3 Name] - Frontend UI/UX implementation, dashboards, routing, responsive layouts
+[Member 4 Name] - Inventory workflows, reporting, CSV exports, testing, QA
+[Member 5 Name] - Localization, documentation, deployment, presentation preparation
+
+All members participated in:
+- Sprint planning
+- Feature review
+- Integration testing
+- Bug fixing
+- Final demo preparation
+
+
+Slide 16 - References & Resources
+Academic & Technical References:
+- MongoDB Documentation - Data modeling and Mongoose integration concepts
+- Express.js Documentation - Routing, middleware, and REST API implementation
+- React Documentation - Component-based UI and state-driven rendering
+- Vite Documentation - Frontend build tooling and production deployment
+- OWASP Guidance - Authentication, authorization, and secure web application practices
+
+Tools, Services & Repositories:
+- Frontend Framework: React + Vite
+- Backend Framework: Node.js + Express
+- Database Service: MongoDB Atlas
+- Frontend Hosting: Vercel
+- Backend Hosting: Render
+- UI Libraries: Radix UI, Lucide React, Recharts
+- Repository: [Add GitHub repository link]
+- Demo: https://milstock-frontend.vercel.app
+
+
+Slide 17 - Thank You
+Thank You!
+
+Team Name:
+[Insert Team Name]
+
+Track:
+Software Development / Applied Technology
+
+Project:
+MilStock - Smart Food Inventory & Warehouse Management System
+
+GitHub / Demo:
+[Add GitHub repository link]
+https://milstock-frontend.vercel.app
+
+Contact:
+[Team email or member contact, if required]

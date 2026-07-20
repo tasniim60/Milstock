@@ -1,0 +1,41 @@
+/* ── RTL / Arabic overrides ── */
+[dir="rtl"] {
+  font-family: 'Cairo', 'IBM Plex Sans Arabic', 'Noto Sans Arabic', sans-serif;
+}
+
+[dir="rtl"] input,
+[dir="rtl"] textarea,
+[dir="rtl"] select {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Smooth font rendering */
+[dir="rtl"] * {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* RTL checkbox/toggle: peer-checked translate direction fix */
+[dir="rtl"] .peer:checked ~ .peer-checked\:after\:translate-x-5 {
+  --tw-translate-x: -1.25rem;
+}
+
+/* Hide scrollbar for sidebar nav */
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Safe area for mobile bottom bar */
+.safe-area-pb {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Smooth transitions for sidebar collapse */
+.sidebar-transition {
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}

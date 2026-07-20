@@ -1,0 +1,145 @@
+MilStock API Testing Endpoints
+Base URL: http://localhost:5001/api
+Auth Header: Authorization: Bearer <token>
+
+PUBLIC / HEALTH
+GET    /api/health
+GET    /
+
+AUTH
+POST   /api/auth/register
+POST   /api/auth/login
+GET    /api/auth/me
+
+USERS
+GET    /api/users
+GET    /api/users?role=supplier&status=active
+POST   /api/users
+GET    /api/users/:id
+PUT    /api/users/:id
+PATCH  /api/users/:id
+DELETE /api/users/:id
+PATCH  /api/users/:id/status
+PATCH  /api/users/:id/password
+
+PRODUCTS / INVENTORY ITEMS
+GET    /api/products
+POST   /api/products
+GET    /api/products/:id
+PUT    /api/products/:id
+DELETE /api/products/:id
+GET    /api/products/:id/alert-settings
+PATCH  /api/products/:id/alert-settings
+
+WAREHOUSES
+GET    /api/warehouses
+POST   /api/warehouses
+GET    /api/warehouses/:id
+PUT    /api/warehouses/:id
+DELETE /api/warehouses/:id
+GET    /api/warehouses/:id/dashboard
+
+SUPPLIERS
+GET    /api/suppliers
+POST   /api/suppliers
+GET    /api/suppliers/users
+GET    /api/suppliers/:id
+PUT    /api/suppliers/:id
+DELETE /api/suppliers/:id
+
+SUPPLIER ORDERS
+GET    /api/supplier/orders
+GET    /api/supplier/orders/:id
+PATCH  /api/supplier/orders/:id/status
+
+PROVIDER COMPATIBILITY ROUTES
+GET    /api/providers
+GET    /api/providers/orders
+GET    /api/providers/orders/:id
+PATCH  /api/providers/orders/:id/status
+
+ORDERS / REQUESTS
+GET    /api/orders
+POST   /api/orders
+GET    /api/orders/:id
+PUT    /api/orders/:id
+DELETE /api/orders/:id
+PATCH  /api/orders/:id/status
+PATCH  /api/orders/:id/admin-decision
+GET    /api/orders/:id/status-logs
+
+ORDER ITEMS
+GET    /api/order-items
+POST   /api/order-items
+GET    /api/order-items/:id
+PUT    /api/order-items/:id
+DELETE /api/order-items/:id
+
+ORDER ITEMS ALIAS
+GET    /api/orders/items
+POST   /api/orders/items
+GET    /api/orders/items/:id
+PUT    /api/orders/items/:id
+DELETE /api/orders/items/:id
+
+PRODUCT WAREHOUSE STOCK
+GET    /api/product-warehouses
+POST   /api/product-warehouses
+GET    /api/product-warehouses/:id
+PUT    /api/product-warehouses/:id
+DELETE /api/product-warehouses/:id
+
+PRODUCT WAREHOUSE STOCK ALIAS
+GET    /api/inventory/product-warehouses
+POST   /api/inventory/product-warehouses
+GET    /api/inventory/product-warehouses/:id
+PUT    /api/inventory/product-warehouses/:id
+DELETE /api/inventory/product-warehouses/:id
+
+MOVEMENT LOGS
+GET    /api/movements
+POST   /api/movements
+GET    /api/movements/:id
+PUT    /api/movements/:id
+DELETE /api/movements/:id
+PATCH  /api/movements/complete-transfer/:orderId
+
+INVENTORY MOVEMENT ALIAS
+GET    /api/inventory
+POST   /api/inventory
+GET    /api/inventory/:id
+PUT    /api/inventory/:id
+DELETE /api/inventory/:id
+PATCH  /api/inventory/complete-transfer/:orderId
+
+CONSUMPTION
+GET    /api/consumption
+POST   /api/consumption
+GET    /api/consumption/:id
+PUT    /api/consumption/:id
+DELETE /api/consumption/:id
+
+NOTIFICATIONS
+GET    /api/notifications
+POST   /api/notifications
+GET    /api/notifications/expiration
+GET    /api/notifications/expiration/check
+PATCH  /api/notifications/read-all
+GET    /api/notifications/:id
+PUT    /api/notifications/:id
+DELETE /api/notifications/:id
+PATCH  /api/notifications/:id/read
+
+AUDIT LOGS
+GET    /api/audit-logs
+POST   /api/audit-logs
+
+COMMON QUERY TESTS
+GET    /api/products?warehouse_id=:warehouseId
+GET    /api/orders?request_type=warehouse_request
+GET    /api/orders?request_type=supplier_request
+GET    /api/orders?status=pending
+GET    /api/movements?status=pending&movement_type=warehouse_transfer
+GET    /api/movements?status=completed
+GET    /api/product-warehouses?warehouse_id=:warehouseId
+GET    /api/order-items?order_id=:orderId

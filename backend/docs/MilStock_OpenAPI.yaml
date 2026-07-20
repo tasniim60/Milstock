@@ -1,0 +1,898 @@
+openapi: 3.0.0
+info:
+  title: MilStock API
+  version: 1.0.0
+  description: Core OpenAPI specification for the MilStock backend.
+servers:
+  - url: http://localhost:5001/api
+    description: Local
+  - url: "[ADD_RENDER_BACKEND_URL_HERE]/api"
+    description: Production
+security:
+  - bearerAuth: []
+tags:
+  - name: Auth
+  - name: Users
+  - name: Products
+  - name: Warehouses
+  - name: Orders
+  - name: Supplier
+  - name: Movements
+  - name: Notifications
+  - name: Audit Logs
+paths:
+  /health:
+    get:
+      tags: [Auth]
+      summary: API health check
+      security: []
+      responses:
+        "200":
+          description: API is running
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Register a user
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+      responses:
+        "201":
+          description: Registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          $ref: "#/components/responses/Error"
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          $ref: "#/components/responses/Error"
+  /auth/me:
+    get:
+      tags: [Auth]
+      summary: Current user
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  user:
+                    $ref: "#/components/schemas/User"
+                  data:
+                    $ref: "#/components/schemas/User"
+  /users:
+    get:
+      tags: [Users]
+      summary: List users
+      parameters:
+        - in: query
+          name: role
+          schema:
+            type: string
+            enum: [admin, unit, supplier]
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [active, inactive]
+      responses:
+        "200":
+          description: Users
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListUsersResponse"
+    post:
+      tags: [Users]
+      summary: Create user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserRequest"
+      responses:
+        "201":
+          description: Created
+  /users/{id}:
+    get:
+      tags: [Users]
+      summary: Get user
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "200":
+          description: User
+    put:
+      tags: [Users]
+      summary: Update user
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "200":
+          description: Updated
+    patch:
+      tags: [Users]
+      summary: Partially update user
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "200":
+          description: Updated
+    delete:
+      tags: [Users]
+      summary: Delete user
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "204":
+          description: Deleted
+  /users/{id}/status:
+    patch:
+      tags: [Users]
+      summary: Activate or deactivate user
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [active, inactive]
+      responses:
+        "200":
+          description: Updated
+  /users/{id}/password:
+    patch:
+      tags: [Users]
+      summary: Reset user password
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [password]
+              properties:
+                password:
+                  type: string
+                  example: Password123!
+      responses:
+        "200":
+          description: Password reset
+  /products:
+    get:
+      tags: [Products]
+      summary: List products
+      responses:
+        "200":
+          description: Products
+    post:
+      tags: [Products]
+      summary: Create product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+      responses:
+        "201":
+          description: Created
+  /products/{id}:
+    get:
+      tags: [Products]
+      summary: Get product
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "200":
+          description: Product
+    put:
+      tags: [Products]
+      summary: Update product
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "200":
+          description: Updated
+    delete:
+      tags: [Products]
+      summary: Delete product
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "204":
+          description: Deleted
+  /products/{id}/alert-settings:
+    get:
+      tags: [Products]
+      summary: Get product alert settings
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "200":
+          description: Product alert settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductAlertSettingsResponse"
+    patch:
+      tags: [Products]
+      summary: Update product alert settings
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductAlertSettings"
+      responses:
+        "200":
+          description: Updated
+  /warehouses:
+    get:
+      tags: [Warehouses]
+      summary: List warehouses
+      responses:
+        "200":
+          description: Warehouses
+    post:
+      tags: [Warehouses]
+      summary: Create warehouse
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Warehouse"
+      responses:
+        "201":
+          description: Created
+  /warehouses/{id}:
+    get:
+      tags: [Warehouses]
+      summary: Get warehouse
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "200":
+          description: Warehouse
+    put:
+      tags: [Warehouses]
+      summary: Update warehouse
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "200":
+          description: Updated
+    delete:
+      tags: [Warehouses]
+      summary: Delete warehouse
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "204":
+          description: Deleted
+  /warehouses/{id}/dashboard:
+    get:
+      tags: [Warehouses]
+      summary: Warehouse dashboard
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "200":
+          description: Warehouse dashboard
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WarehouseDashboardResponse"
+        "403":
+          $ref: "#/components/responses/Error"
+  /suppliers:
+    get:
+      tags: [Supplier]
+      summary: List supplier records
+      responses:
+        "200":
+          description: Suppliers
+    post:
+      tags: [Supplier]
+      summary: Create supplier record
+      responses:
+        "201":
+          description: Created
+  /suppliers/users:
+    get:
+      tags: [Supplier]
+      summary: List active supplier users
+      responses:
+        "200":
+          description: Supplier users
+  /orders:
+    get:
+      tags: [Orders]
+      summary: List orders
+      parameters:
+        - in: query
+          name: request_type
+          schema:
+            type: string
+            enum: [warehouse_request, supplier_request, warehouse_transfer, provider]
+        - in: query
+          name: status
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Orders
+    post:
+      tags: [Orders]
+      summary: Create request/order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOrderRequest"
+      responses:
+        "201":
+          description: Created
+  /orders/{id}:
+    get:
+      tags: [Orders]
+      summary: Get order
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "200":
+          description: Order
+    put:
+      tags: [Orders]
+      summary: Update order
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "200":
+          description: Updated
+    delete:
+      tags: [Orders]
+      summary: Delete order
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "204":
+          description: Deleted
+  /orders/{id}/status:
+    patch:
+      tags: [Orders]
+      summary: Admin status update
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                note:
+                  type: string
+      responses:
+        "200":
+          description: Updated
+  /orders/{id}/admin-decision:
+    patch:
+      tags: [Orders]
+      summary: Admin approve or reject warehouse request
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [decision]
+              properties:
+                decision:
+                  type: string
+                  enum: [approve, reject]
+                note:
+                  type: string
+      responses:
+        "200":
+          description: Approved or rejected
+  /orders/{id}/status-logs:
+    get:
+      tags: [Orders]
+      summary: Get order status logs
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "200":
+          description: Status logs
+  /supplier/orders:
+    get:
+      tags: [Supplier]
+      summary: Get current supplier orders
+      responses:
+        "200":
+          description: Supplier orders
+  /supplier/orders/{id}:
+    get:
+      tags: [Supplier]
+      summary: Get current supplier order
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "200":
+          description: Supplier order
+  /supplier/orders/{id}/status:
+    patch:
+      tags: [Supplier]
+      summary: Update supplier order status
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [accepted, rejected, in_delivery, delivered]
+                note:
+                  type: string
+      responses:
+        "200":
+          description: Updated
+  /movements:
+    get:
+      tags: [Movements]
+      summary: List movement logs
+      parameters:
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [pending, completed, cancelled, failed]
+        - in: query
+          name: movement_type
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Movements
+    post:
+      tags: [Movements]
+      summary: Create movement
+      responses:
+        "201":
+          description: Created
+  /movements/{id}:
+    get:
+      tags: [Movements]
+      summary: Get movement
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "200":
+          description: Movement
+    put:
+      tags: [Movements]
+      summary: Update movement
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "200":
+          description: Updated
+    delete:
+      tags: [Movements]
+      summary: Delete movement
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "204":
+          description: Deleted
+  /movements/complete-transfer/{orderId}:
+    patch:
+      tags: [Movements]
+      summary: Complete warehouse transfer from Movement Logs
+      parameters:
+        - in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                note:
+                  type: string
+      responses:
+        "200":
+          description: Completed
+        "400":
+          $ref: "#/components/responses/Error"
+  /notifications:
+    get:
+      tags: [Notifications]
+      summary: List notifications
+      responses:
+        "200":
+          description: Notifications
+    post:
+      tags: [Notifications]
+      summary: Create notification
+      responses:
+        "201":
+          description: Created
+  /notifications/read-all:
+    patch:
+      tags: [Notifications]
+      summary: Mark all notifications read
+      responses:
+        "200":
+          description: Updated
+  /notifications/{id}/read:
+    patch:
+      tags: [Notifications]
+      summary: Mark notification read
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "200":
+          description: Updated
+  /audit-logs:
+    get:
+      tags: [Audit Logs]
+      summary: List audit logs
+      responses:
+        "200":
+          description: Audit logs
+    post:
+      tags: [Audit Logs]
+      summary: Create frontend audit log
+      responses:
+        "201":
+          description: Created
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    Id:
+      in: path
+      name: id
+      required: true
+      schema:
+        type: string
+      example: 64f000000000000000000001
+  responses:
+    Error:
+      description: Error response
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: Error message
+    RegisterRequest:
+      type: object
+      required: [name, email, password, phone, military_number]
+      properties:
+        name:
+          type: string
+          example: Unit User
+        email:
+          type: string
+          example: unit@milstock.local
+        password:
+          type: string
+          example: Password123!
+        phone:
+          type: string
+          example: "+966550000000"
+        military_number:
+          type: string
+          example: EMP-001
+        role:
+          type: string
+          enum: [admin, unit, supplier]
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          example: admin@milstock.local
+        password:
+          type: string
+          example: Password123!
+    AuthResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        token:
+          type: string
+        user:
+          $ref: "#/components/schemas/User"
+        data:
+          $ref: "#/components/schemas/User"
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        military_number:
+          type: string
+        role:
+          type: string
+          enum: [admin, unit, supplier]
+        status:
+          type: string
+          enum: [active, inactive]
+        assigned_warehouse:
+          oneOf:
+            - type: string
+            - $ref: "#/components/schemas/Warehouse"
+            - nullable: true
+    CreateUserRequest:
+      allOf:
+        - $ref: "#/components/schemas/RegisterRequest"
+        - type: object
+          properties:
+            status:
+              type: string
+              enum: [active, inactive]
+            assigned_warehouse:
+              type: string
+              nullable: true
+    ListUsersResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        count:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+          example: Bread
+        quantity:
+          type: number
+        unit:
+          type: string
+          enum: [kg, g, liter, Tons, piece, box]
+        category:
+          type: string
+        min_quantity:
+          type: number
+        warehouse_id:
+          type: string
+        alert_settings:
+          $ref: "#/components/schemas/ProductAlertSettings"
+    ProductAlertSettings:
+      type: object
+      properties:
+        low_stock_threshold:
+          type: number
+          example: 50
+        critical_stock_threshold:
+          type: number
+          example: 10
+        expiration_warning_days:
+          type: number
+          example: 30
+        critical_expiration_days:
+          type: number
+          example: 7
+    ProductAlertSettingsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          allOf:
+            - $ref: "#/components/schemas/ProductAlertSettings"
+            - type: object
+              properties:
+                product_id:
+                  type: string
+                product_name:
+                  type: string
+                unit:
+                  type: string
+    Warehouse:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        code:
+          type: string
+        location:
+          type: string
+        capacity:
+          type: number
+        status:
+          type: string
+          enum: [active, inactive]
+    WarehouseDashboardResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            warehouse:
+              $ref: "#/components/schemas/Warehouse"
+            stats:
+              type: object
+            stockDistribution:
+              type: array
+              items:
+                type: object
+            inventory:
+              type: array
+              items:
+                type: object
+            recentMovements:
+              type: array
+              items:
+                type: object
+            recentRequests:
+              type: array
+              items:
+                type: object
+            expiringItems:
+              type: array
+              items:
+                type: object
+            lowStockItems:
+              type: array
+              items:
+                type: object
+    CreateOrderRequest:
+      type: object
+      required: [request_type, items]
+      properties:
+        request_type:
+          type: string
+          enum: [warehouse_request, supplier_request]
+        source_warehouse:
+          type: string
+        destination_warehouse:
+          type: string
+        supplier_id:
+          type: string
+        items:
+          type: array
+          items:
+            type: object
+            required: [product_id, quantity]
+            properties:
+              product_id:
+                type: string
+              quantity:
+                type: number
+        notes:
+          type: string
+    Order:
+      type: object
+      properties:
+        _id:
+          type: string
+        request_type:
+          type: string
+          enum: [warehouse_request, supplier_request, warehouse_transfer, provider]
+        status:
+          type: string
+          enum: [pending, accepted, rejected, approved, in_transfer, completed, cancelled, in_delivery, delivered]
+        user_id:
+          type: string
+        requested_by:
+          type: string
+        supplier_id:
+          type: string
+        source_warehouse:
+          type: string
+        destination_warehouse:
+          type: string
+        total_price:
+          type: number
+    Notification:
+      type: object
+      properties:
+        _id:
+          type: string
+        title:
+          type: string
+        message:
+          type: string
+        type:
+          type: string
+        user_id:
+          type: string
+        metadata:
+          type: object
+    AuditLog:
+      type: object
+      properties:
+        _id:
+          type: string
+        action:
+          type: string
+        module:
+          type: string
+        entityId:
+          type: string
+        entityType:
+          type: string
+        description:
+          type: string

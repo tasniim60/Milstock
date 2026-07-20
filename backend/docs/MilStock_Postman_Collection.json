@@ -1,0 +1,716 @@
+{
+  "info": {
+    "name": "MilStock API Collection",
+    "_postman_id": "4d3e7f4a-8a5b-4d6f-9a62-milstock-docs",
+    "description": "Postman starter collection for MilStock backend APIs. Set base_url to http://localhost:5001/api for local testing.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:5001/api" },
+    { "key": "token", "value": "" },
+    { "key": "admin_token", "value": "" },
+    { "key": "unit_token", "value": "" },
+    { "key": "supplier_token", "value": "" },
+    { "key": "user_id", "value": "64f000000000000000000001" },
+    { "key": "warehouse_id", "value": "64f000000000000000000002" },
+    { "key": "product_id", "value": "64f000000000000000000003" },
+    { "key": "order_id", "value": "64f000000000000000000004" },
+    { "key": "supplier_id", "value": "64f000000000000000000005" },
+    { "key": "movement_id", "value": "64f000000000000000000006" },
+    { "key": "order_item_id", "value": "64f000000000000000000007" },
+    { "key": "product_warehouse_id", "value": "64f000000000000000000008" },
+    { "key": "notification_id", "value": "64f000000000000000000009" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{token}}", "type": "string" }
+    ]
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "API Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/health"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Unit User\",\n  \"email\": \"unit@milstock.local\",\n  \"password\": \"Password123!\",\n  \"phone\": \"+966550000000\",\n  \"military_number\": \"EMP-001\",\n  \"role\": \"unit\"\n}"
+            },
+            "url": "{{base_url}}/auth/register"
+          }
+        },
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.token) {",
+                  "  pm.environment.set('token', json.token);",
+                  "  pm.environment.set('admin_token', json.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@milstock.local\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": "{{base_url}}/auth/login"
+          }
+        },
+        {
+          "name": "Login Unit",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.token) { pm.environment.set('unit_token', json.token); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"unit@milstock.local\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": "{{base_url}}/auth/login"
+          }
+        },
+        {
+          "name": "Login Supplier",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.token) { pm.environment.set('supplier_token', json.token); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"supplier.food@milstock.local\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": "{{base_url}}/auth/login"
+          }
+        },
+        {
+          "name": "Me",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/auth/me"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get Users",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": "{{base_url}}/users"
+          }
+        },
+        {
+          "name": "Get Active Supplier Users",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/users?role=supplier&status=active"
+          }
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cold Kitchen\",\n  \"email\": \"cold.kitchen@milstock.local\",\n  \"password\": \"Password123!\",\n  \"phone\": \"+966550000001\",\n  \"military_number\": \"UNIT-001\",\n  \"role\": \"unit\",\n  \"status\": \"active\",\n  \"assigned_warehouse\": \"{{warehouse_id}}\"\n}"
+            },
+            "url": "{{base_url}}/users"
+          }
+        },
+        {
+          "name": "Get User",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": "{{base_url}}/users/{{user_id}}"
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Unit User\",\n  \"role\": \"unit\",\n  \"assigned_warehouse\": \"{{warehouse_id}}\"\n}"
+            },
+            "url": "{{base_url}}/users/{{user_id}}"
+          }
+        },
+        {
+          "name": "Update User Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"inactive\"\n}" },
+            "url": "{{base_url}}/users/{{user_id}}/status"
+          }
+        },
+        {
+          "name": "Reset User Password",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"password\": \"Password123!\"\n}" },
+            "url": "{{base_url}}/users/{{user_id}}/password"
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": "{{base_url}}/users/{{user_id}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Inventory",
+      "item": [
+        {
+          "name": "Get Products",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/products"
+          }
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Bread\",\n  \"quantity\": 100,\n  \"unit\": \"piece\",\n  \"category\": \"Food\",\n  \"min_quantity\": 20,\n  \"warehouse_id\": \"{{warehouse_id}}\",\n  \"expiry_date\": \"2026-12-31T00:00:00.000Z\"\n}"
+            },
+            "url": "{{base_url}}/products"
+          }
+        },
+        {
+          "name": "Get Product",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/products/{{product_id}}"
+          }
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Bread\",\n  \"unit\": \"piece\",\n  \"category\": \"Food\"\n}" },
+            "url": "{{base_url}}/products/{{product_id}}"
+          }
+        },
+        {
+          "name": "Get Product Alert Settings",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/products/{{product_id}}/alert-settings"
+          }
+        },
+        {
+          "name": "Update Product Alert Settings",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"low_stock_threshold\": 50,\n  \"critical_stock_threshold\": 10,\n  \"expiration_warning_days\": 30,\n  \"critical_expiration_days\": 7\n}"
+            },
+            "url": "{{base_url}}/products/{{product_id}}/alert-settings"
+          }
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": "{{base_url}}/products/{{product_id}}"
+          }
+        },
+        {
+          "name": "Get Product Warehouse Stock",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/product-warehouses?warehouse_id={{warehouse_id}}"
+          }
+        },
+        {
+          "name": "Create Product Warehouse Stock",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"product_id\": \"{{product_id}}\",\n  \"warehouse_id\": \"{{warehouse_id}}\",\n  \"quantity\": 100\n}" },
+            "url": "{{base_url}}/product-warehouses"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Warehouses",
+      "item": [
+        {
+          "name": "Get Warehouses",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/warehouses"
+          }
+        },
+        {
+          "name": "Create Warehouse",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dry Goods Warehouse\",\n  \"code\": \"WH-DRY\",\n  \"location\": \"Main Storage Zone A\",\n  \"capacity\": 50000,\n  \"status\": \"active\"\n}"
+            },
+            "url": "{{base_url}}/warehouses"
+          }
+        },
+        {
+          "name": "Get Warehouse",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/warehouses/{{warehouse_id}}"
+          }
+        },
+        {
+          "name": "Get Warehouse Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/warehouses/{{warehouse_id}}/dashboard"
+          }
+        },
+        {
+          "name": "Update Warehouse",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Dry Goods Warehouse\",\n  \"location\": \"Main Storage Zone A\",\n  \"capacity\": 50000,\n  \"status\": \"active\"\n}" },
+            "url": "{{base_url}}/warehouses/{{warehouse_id}}"
+          }
+        },
+        {
+          "name": "Delete Warehouse",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": "{{base_url}}/warehouses/{{warehouse_id}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Requests",
+      "item": [
+        {
+          "name": "Get Orders",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/orders"
+          }
+        },
+        {
+          "name": "Create Warehouse Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{unit_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"request_type\": \"warehouse_request\",\n  \"source_warehouse\": \"{{warehouse_id}}\",\n  \"destination_warehouse\": \"64f000000000000000000009\",\n  \"items\": [\n    {\n      \"product_id\": \"{{product_id}}\",\n      \"quantity\": 10\n    }\n  ],\n  \"notes\": \"Need stock for kitchen\"\n}"
+            },
+            "url": "{{base_url}}/orders"
+          }
+        },
+        {
+          "name": "Create Supplier Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{unit_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"request_type\": \"supplier_request\",\n  \"supplier_id\": \"{{supplier_id}}\",\n  \"destination_warehouse\": \"{{warehouse_id}}\",\n  \"items\": [\n    {\n      \"product_id\": \"{{product_id}}\",\n      \"quantity\": 10\n    }\n  ],\n  \"notes\": \"Please deliver this week\"\n}"
+            },
+            "url": "{{base_url}}/orders"
+          }
+        },
+        {
+          "name": "Get Order",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/orders/{{order_id}}"
+          }
+        },
+        {
+          "name": "Admin Decision",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"decision\": \"approve\",\n  \"note\": \"Approved for movement logs transfer\"\n}" },
+            "url": "{{base_url}}/orders/{{order_id}}/admin-decision"
+          }
+        },
+        {
+          "name": "Update Order Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"approved\",\n  \"note\": \"Approved\"\n}" },
+            "url": "{{base_url}}/orders/{{order_id}}/status"
+          }
+        },
+        {
+          "name": "Get Order Status Logs",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/orders/{{order_id}}/status-logs"
+          }
+        },
+        {
+          "name": "Get Order Items",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/order-items?order_id={{order_id}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Supplier Flow",
+      "item": [
+        {
+          "name": "Get Supplier Records",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/suppliers"
+          }
+        },
+        {
+          "name": "Get Supplier Users",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/suppliers/users"
+          }
+        },
+        {
+          "name": "Create Supplier Record",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Fresh Food Supplier\",\n  \"code\": \"SUP-001\",\n  \"email\": \"supplier.food@milstock.local\",\n  \"phone\": \"+966550010001\",\n  \"category\": \"Food\",\n  \"status\": \"active\"\n}"
+            },
+            "url": "{{base_url}}/suppliers"
+          }
+        },
+        {
+          "name": "Get My Supplier Orders",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{supplier_token}}" }],
+            "url": "{{base_url}}/supplier/orders"
+          }
+        },
+        {
+          "name": "Get My Supplier Order",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{supplier_token}}" }],
+            "url": "{{base_url}}/supplier/orders/{{order_id}}"
+          }
+        },
+        {
+          "name": "Update Supplier Order Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{supplier_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"accepted\",\n  \"note\": \"Accepted by supplier\"\n}" },
+            "url": "{{base_url}}/supplier/orders/{{order_id}}/status"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Movement Logs",
+      "item": [
+        {
+          "name": "Get Movement Logs",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/movements"
+          }
+        },
+        {
+          "name": "Get Pending Transfers",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": "{{base_url}}/movements?status=pending&movement_type=warehouse_transfer"
+          }
+        },
+        {
+          "name": "Get Completed Movements",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": "{{base_url}}/movements?status=completed"
+          }
+        },
+        {
+          "name": "Complete Transfer",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"note\": \"Completed from Movement Logs\"\n}" },
+            "url": "{{base_url}}/movements/complete-transfer/{{order_id}}"
+          }
+        },
+        {
+          "name": "Get Movement",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/movements/{{movement_id}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "Get Notifications",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/notifications"
+          }
+        },
+        {
+          "name": "Get Expiration Notifications",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/notifications/expiration"
+          }
+        },
+        {
+          "name": "Create Notification",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"New warehouse request\",\n  \"message\": \"A new warehouse request is pending approval.\",\n  \"type\": \"warehouse_request\",\n  \"user_id\": \"{{user_id}}\",\n  \"metadata\": {\n    \"order_id\": \"{{order_id}}\"\n  }\n}"
+            },
+            "url": "{{base_url}}/notifications"
+          }
+        },
+        {
+          "name": "Mark All Notifications Read",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/notifications/read-all"
+          }
+        },
+        {
+          "name": "Mark Notification Read",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/notifications/{{notification_id}}/read"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Audit Logs",
+      "item": [
+        {
+          "name": "Get Audit Logs",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": "{{base_url}}/audit-logs"
+          }
+        },
+        {
+          "name": "Create Frontend Audit Log",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"action\": \"view_dashboard\",\n  \"module\": \"dashboard\",\n  \"description\": \"User opened dashboard\"\n}" },
+            "url": "{{base_url}}/audit-logs"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Settings",
+      "item": [
+        {
+          "name": "Get Products For Settings Dropdown",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": "{{base_url}}/products"
+          }
+        },
+        {
+          "name": "Get Product Alert Settings",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": "{{base_url}}/products/{{product_id}}/alert-settings"
+          }
+        },
+        {
+          "name": "Save Product Alert Settings",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"low_stock_threshold\": 50,\n  \"critical_stock_threshold\": 10,\n  \"expiration_warning_days\": 30,\n  \"critical_expiration_days\": 7\n}"
+            },
+            "url": "{{base_url}}/products/{{product_id}}/alert-settings"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "name": "milstock-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "seed": "node seed/seed.js",
+    "migrate:items-fields": "node scripts/migrateItemFields.js",
+    "migrate:users-status": "node scripts/migrateUserStatus.js",
+    "migrate:request-types": "node scripts/migrateRequestTypes.js",
+    "migrate:provider-to-supplier": "node scripts/migrateProviderToSupplier.js",
+    "seed:warehouses-suppliers": "node scripts/seedWarehousesAndSuppliers.js",
+    "migrate:product-alert-settings": "node scripts/migrateProductAlertSettings.js",
+    "migrate:arabic-fields": "node scripts/migrateArabicFields.js",
+    "seed:arabic-translations": "node scripts/seedArabicTranslations.js",
+    "backfill:item-translations": "node scripts/backfillItemTranslations.js",
+    "seed:food-bilingual": "node scripts/seedFoodBilingualDataset.js",
+    "backfill:product-prices": "node scripts/backfillProductPrices.js",
+    "cleanup:non-food-suppliers": "node scripts/cleanupNonFoodSuppliers.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-validator": "^7.2.1",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.5",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
