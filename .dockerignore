@@ -1,0 +1,13 @@
+node_modules
+npm-debug.log
+.env
+.git
+.gitignore
+*.md
+front-end
+node_modules
+qa-output
+scripts
+package-lock.json
+vercel.json
+netlify.toml
