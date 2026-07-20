@@ -86,18 +86,26 @@ const LoginPageView = ({ isArabic = false }) => {
     setError("");
     const normalizedEmail = email.trim().toLowerCase();
 
-    if (normalizedEmail === "testadmin@milstock.local" && password === "123") {
-      const testUser = {
-        _id: "frontend-test-admin",
-        name: "Frontend Test Admin",
-        email: "testadmin@milstock.local",
-        phone: "",
-        military_number: "TEST-ADMIN",
-        role: "admin",
-      };
+    const mockAccounts = {
+      "admin@milstock.local": {
+        password: "Password123!",
+        user: { _id: "mock-admin", name: "المسؤول", email: "admin@milstock.local", phone: "", military_number: "ADMIN-001", role: "admin" },
+      },
+      "kitchen@milstock.local": {
+        password: "Password123!",
+        user: { _id: "mock-kitchen", name: "مستخدم المطبخ", email: "kitchen@milstock.local", phone: "", military_number: "KITCHEN-001", role: "kitchen" },
+      },
+      "testadmin@milstock.local": {
+        password: "123",
+        user: { _id: "frontend-test-admin", name: "Frontend Test Admin", email: "testadmin@milstock.local", phone: "", military_number: "TEST-ADMIN", role: "admin" },
+      },
+    };
+
+    const mock = mockAccounts[normalizedEmail];
+    if (mock && password === mock.password) {
       localStorage.setItem("milstock_token", "frontend-test-admin-token");
-      localStorage.setItem("milstock_user", JSON.stringify(testUser));
-      navigate(isArabic ? "/ar/admin/dashboard" : "/admin/dashboard", { replace: true });
+      localStorage.setItem("milstock_user", JSON.stringify(mock.user));
+      navigate(getRoleHomePath(mock.user.role, isArabic), { replace: true });
       setLoading(false);
       return;
     }
