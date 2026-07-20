@@ -29,7 +29,7 @@ const { setupSwagger } = require('./docs/swagger');
 const app = express();
 const defaultClientOrigins = [
   'http://localhost:5173',
-  'https://milstock-frontend.vercel.app',
+  'https://milstock-b4yo.vercel.app/',
 ];
 const configuredClientOrigins = [
   process.env.CLIENT_URL,
